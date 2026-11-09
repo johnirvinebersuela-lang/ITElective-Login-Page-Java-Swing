@@ -1,100 +1,76 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class LoginPage extends JFrame {
-    private static final String VALID_USERNAME = "111";
-    private static final String VALID_PASSWORD = "111";
-
-    private final JTextField usernameField = new JTextField(18);
-    private final JPasswordField passwordField = new JPasswordField(18);
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+    private JButton loginButton;
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new LoginPage().setVisible(true));
+        LoginPage frame = new LoginPage();
+        frame.setVisible(true);
     }
 
     public LoginPage() {
+        setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(8, 8, 8, 8);
 
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.insets = new Insets(8, 10, 8, 10);
-        constraints.anchor = GridBagConstraints.LINE_START;
+        c.gridx = 0; 
+        c.gridy = 0; 
+        add(new JLabel("Username:"), c);
 
-        constraints.gridwidth = 1;
-        constraints.anchor = GridBagConstraints.LINE_START;
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        add(new JLabel("Username:"), constraints);
+        c.gridx = 1;
+        c.gridy = 0;
+        usernameField = new JTextField(15);
+        add(usernameField, c);
 
-        constraints.gridx = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.weightx = 1;
-        add(usernameField, constraints);
+        c.gridx = 0; 
+        c.gridy = 1; 
+        add(new JLabel("Password:"), c);
 
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.weightx = 0;
-        add(new JLabel("Password:"), constraints);
+        c.gridx = 1; 
+        c.gridy = 1; 
+        passwordField = new JPasswordField(15);
+        add(passwordField, c);
 
-        constraints.gridx = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.weightx = 1;
-        add(passwordField, constraints);
+        c.gridx = 0; 
+        c.gridy = 2; 
+        c.gridwidth = 2; 
+        loginButton = new JButton("Login");
+        add(loginButton, c);
 
-        JButton loginButton = new JButton("Login");
-        loginButton.addActionListener(event -> submitLogin());
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.gridwidth = 2;
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.weightx = 0;
-        constraints.anchor = GridBagConstraints.CENTER;
-        add(loginButton, constraints);
+        
+        pack(); 
+        setLocationRelativeTo(null); 
 
-        getRootPane().setDefaultButton(loginButton);
-        pack();
-        setMinimumSize(getSize());
-        setLocationRelativeTo(null);
+        loginButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                checkLogin();
+            }
+        });
     }
 
-    private void submitLogin() {
-        char[] password = passwordField.getPassword();
+    private void checkLogin() {
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword()); // Clean beginner approach to get text
 
-        try {
-            String username = usernameField.getText().trim();
-
-            if (username.isBlank() || password.length == 0) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Enter both your username and password.",
-                        "Missing information",
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            if (!VALID_USERNAME.equals(username)
-                    || !java.util.Arrays.equals(password, VALID_PASSWORD.toCharArray())) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "The username or password is incorrect.",
-                        "Sign-in failed",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
+        if (username.equals("") || password.equals("")) {
+            JOptionPane.showMessageDialog(this, "Enter both your username and password.");
+        } 
+        else if (username.equals("111") && password.equals("111")) {
+            JOptionPane.showMessageDialog(this, "Login Successful!");
             new HomePage().setVisible(true);
             dispose();
-        } catch (RuntimeException exception) {
-            exception.printStackTrace();
-            JOptionPane.showMessageDialog(
-                    this,
-                    "An unexpected error occurred. Please try again.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        } finally {
-            java.util.Arrays.fill(password, '\0');
-            passwordField.setText("");
+        } 
+        else {
+            JOptionPane.showMessageDialog(this, "The username or password is incorrect.");
+            passwordField.setText(""); 
         }
     }
 }

@@ -1,65 +1,57 @@
 import javax.swing.*;
-import java.io.File;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import javax.sound.sampled.*;
+import java.awt.*;
 
 public class HomePage extends JFrame {
-    public HomePage() {
-        super("Home");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setSize(900, 600);
-        setLocationRelativeTo(null);
-        
-        JLabel bg = new JLabel(new javax.swing.ImageIcon("For Project Bypass.png"));
-        bg.setLayout(null); 
-        setContentPane(bg);
-        
-        JButton soundButton = new JButton("MAMBO");
-        
-        // Triggers the sound method safely
-        soundButton.addActionListener(e -> playSound("Mambo sound effect.wav"));
-        
-        // Exact location you drew out on the screenshot
-        soundButton.setBounds(100, 480, 100, 40); 
-        bg.add(soundButton);
 
-        setVisible(true);
-    }
+  private CustomLabel1 label1;
+  private CustomLabel2 label2;
+  private CustomLabel3 label3;
+  private CustomLabel4 label4;
+  private CustomLabel5 label5;
+  private CustomButton1 button6;
 
-    private void playSound(String filename) {
-        // Runs the audio on a separate background thread to guarantee it executes cleanly
-        new Thread(() -> {
-            try {
-                File file = new File(filename);
-                
-                if (!file.exists()) {
-                    System.out.println("❌ FILE LOCATION ERROR!");
-                    System.out.println("Move your file here: " + file.getAbsolutePath());
-                    return;
-                }
+  public HomePage() {
+    setTitle("HomePage");
+    setSize(1024, 768);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    getContentPane().setBackground(new Color(255, 255, 255));
+    setLayout(null);
 
-                // Uses a robust stream method to ensure the bytes are completely buffered before playback
-                AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                    new BufferedInputStream(new FileInputStream(file))
-                );
-                
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioStream);
-                
-                // Forces the audio clip line to fire immediately
-                clip.start();
-                System.out.println("🎵 Audio stream executed successfully for: " + filename);
-                
-            } catch (UnsupportedAudioFileException e) {
-                System.out.println("❌ AUDIO CODEC ERROR: Your file extension says .wav, but the internal encoding isn't PCM 16-bit.");
-                System.out.println("Fix: Re-convert the file online specifically to a 16-bit PCM WAV layout.");
-            } catch (Exception e) {
-                System.out.println("❌ ERROR DETAILS:");
-                e.printStackTrace();
-            }
-        }).start();
-    }
+    label1 = new CustomLabel1();
+    label1.setBounds(750, 60, 999, 28);
+    label1.setForeground(Color.BLACK);
+    this.add(label1);
+
+    label2 = new CustomLabel2();
+    label2.setBounds(750, 40, 225, 28);
+    label2.setForeground(Color.BLACK);
+    this.add(label2);
+
+    label3 = new CustomLabel3();
+    label3.setBounds(750, 80, 480, 28);
+    label3.setForeground(Color.BLACK);
+    this.add(label3);
+
+    label4 = new CustomLabel4();
+    label4.setBounds(750, 100, 480, 28);
+    label4.setForeground(Color.BLACK);
+    this.add(label4);
+
+    label5 = new CustomLabel5();
+    label5.setBounds(750, 120, 480, 28);
+    label5.setForeground(Color.BLACK);
+    this.add(label5);
+
+    button6 = new CustomButton1();
+    button6.setBounds(886, 675, 120, 36);
+    this.add(button6);
+
+    setLocationRelativeTo(null);
+  }
+  public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> {
+      HomePage frame = new HomePage();
+      frame.setVisible(true);
+    });
+  }
 }
